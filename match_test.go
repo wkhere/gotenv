@@ -48,6 +48,15 @@ func TestMatch(t *testing.T) {
 		tvalid("_1=1", "_1", "1"),
 		terror("1=1", "invalid state"),
 		terror("1=", "invalid state"),
+		tvalid("aa=12 ", "aa", "12"),
+		tvalid(" aa=12 ", "aa", "12"),
+		tvalid("aa =12", "aa", "12"),
+		tvalid("aa= 12", "aa", "12"),
+		tvalid("aa = 12", "aa", "12"),
+		tvalid(" aa= 12 ", "aa", "12"),
+		tvalid(" aa = 12 ", "aa", "12"),
+		tvalid(" aa = '12' ", "aa", "12"),
+		tvalid(` aa = "12" `, "aa", "12"),
 	}
 
 	for i, tc := range tab {

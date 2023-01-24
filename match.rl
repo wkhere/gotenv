@@ -23,12 +23,12 @@ func match(data []byte) (e envvar, err error) {
 		action setValQuoted { e.val = textQuoted() }
 
 		key = (alpha | '_')+ >mark (alnum | '_')* %setKey;
-		nonQuote = (any - ('"'|'\''));
+		nonQuote = any - ('"'|'\'') & ^space;
 		valSingleQuoted  = '\'' >mark !'\'' '\'' %setValQuoted;
 		valDoubleQuoted  = '"'  >mark !'"'  '"'  %setValQuoted;
 		valSimple  = nonQuote >mark (any* nonQuote)? %setVal;
 		val = (valSingleQuoted | valDoubleQuoted | valSimple | zlen);
-		main := (key '=' val) | space*;
+		main := space* (key space* '=' space* val space*) | space*;
 
 		write init;
 		write exec;
