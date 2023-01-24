@@ -18,6 +18,10 @@ func readenv(r io.Reader) (ee []envvar, _ error) {
                 lineno, err, e,
             )
         }
+        if e.key == "" {
+            // empty var and no error means empty line or comments
+            continue
+        }
         ee = append(ee, e)
     }
     return ee, b.Err()

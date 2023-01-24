@@ -19,6 +19,12 @@ func TestMatch(t *testing.T) {
 		return tcase{input: input, wanterr: errmsg}
 	}
 	var tab = []tcase{
+		tvalid("", "", ""),
+		tvalid(" ", "", ""),
+		tvalid("     ", "", ""),
+		tvalid("\t", "", ""),
+		tvalid("\t\t\t\t", "", ""),
+		tvalid(" \t\t  \t ", "", ""),
 		terror("a", "invalid state"),
 		terror("aaa", "invalid state"),
 		terror("=", "invalid state"),

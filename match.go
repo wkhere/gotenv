@@ -13,14 +13,14 @@ func match(data []byte) (e envvar, err error) {
 //line match.go:14
 var _envvar_eof_actions []byte = []byte{
 	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 3, 4, 4, 4, 4, 
+	0, 0, 3, 4, 4, 4, 4, 
 }
 
-const envvar_start int = 1
-const envvar_first_final int = 8
+const envvar_start int = 7
+const envvar_first_final int = 7
 const envvar_error int = 0
 
-const envvar_en_main int = 1
+const envvar_en_main int = 7
 
 
 //line match.rl:10
@@ -48,122 +48,138 @@ const envvar_en_main int = 1
 	}
 _resume:
 	switch cs {
-	case 1:
-		if data[p] == 95 {
-			goto tr0;
+	case 7:
+		switch data[p] {
+		case 32:
+			goto tr11;
+		case 95:
+			goto tr12;
 		}
 		switch {
+		case data[p] < 65:
+			if 9 <= data[p] && data[p] <= 13 {
+				goto tr11;
+			}
 		case data[p] > 90:
 			if 97 <= data[p] && data[p] <= 122 {
-				goto tr0;
+				goto tr12;
 			}
-		case data[p] >= 65:
-			goto tr0;
+		default:
+			goto tr12;
 		}
 		goto tr1;
 	case 0:
 		goto _out
-	case 2:
+	case 8:
+		if data[p] == 32 {
+			goto tr11;
+		}
+		if 9 <= data[p] && data[p] <= 13 {
+			goto tr11;
+		}
+		goto tr1;
+	case 1:
 		switch data[p] {
 		case 61:
-			goto tr3;
-		case 95:
 			goto tr2;
+		case 95:
+			goto tr0;
 		}
 		switch {
 		case data[p] < 65:
 			if 48 <= data[p] && data[p] <= 57 {
-				goto tr2;
+				goto tr0;
 			}
 		case data[p] > 90:
 			if 97 <= data[p] && data[p] <= 122 {
-				goto tr2;
+				goto tr0;
 			}
 		default:
-			goto tr2;
+			goto tr0;
 		}
 		goto tr1;
-	case 8:
-		switch data[p] {
-		case 34:
-			goto tr13;
-		case 39:
-			goto tr14;
-		}
-		goto tr12;
 	case 9:
 		switch data[p] {
 		case 34:
-			goto tr5;
+			goto tr14;
 		case 39:
-			goto tr5;
+			goto tr15;
 		}
-		goto tr4;
-	case 3:
+		goto tr13;
+	case 10:
 		switch data[p] {
 		case 34:
-			goto tr5;
+			goto tr4;
 		case 39:
-			goto tr5;
+			goto tr4;
 		}
-		goto tr4;
+		goto tr3;
+	case 2:
+		switch data[p] {
+		case 34:
+			goto tr4;
+		case 39:
+			goto tr4;
+		}
+		goto tr3;
+	case 3:
+		if data[p] == 34 {
+			goto tr6;
+		}
+		goto tr5;
 	case 4:
 		if data[p] == 34 {
 			goto tr7;
 		}
-		goto tr6;
-	case 5:
-		if data[p] == 34 {
-			goto tr8;
-		}
-		goto tr6;
-	case 10:
-		if data[p] == 34 {
-			goto tr8;
-		}
-		goto tr6;
+		goto tr5;
 	case 11:
-		goto tr6;
+		if data[p] == 34 {
+			goto tr7;
+		}
+		goto tr5;
+	case 12:
+		goto tr5;
+	case 5:
+		if data[p] == 39 {
+			goto tr9;
+		}
+		goto tr8;
 	case 6:
 		if data[p] == 39 {
 			goto tr10;
 		}
-		goto tr9;
-	case 7:
-		if data[p] == 39 {
-			goto tr11;
-		}
-		goto tr9;
-	case 12:
-		if data[p] == 39 {
-			goto tr11;
-		}
-		goto tr9;
+		goto tr8;
 	case 13:
-		goto tr9;
+		if data[p] == 39 {
+			goto tr10;
+		}
+		goto tr8;
+	case 14:
+		goto tr8;
 	}
 
 	tr1: cs = 0; goto _again
-	tr2: cs = 2; goto _again
-	tr0: cs = 2; goto f0
-	tr5: cs = 3; goto _again
-	tr13: cs = 4; goto f0
-	tr6: cs = 5; goto _again
-	tr14: cs = 6; goto f0
-	tr9: cs = 7; goto _again
-	tr3: cs = 8; goto f1
-	tr4: cs = 9; goto _again
-	tr12: cs = 9; goto f0
-	tr8: cs = 10; goto _again
+	tr0: cs = 1; goto _again
+	tr12: cs = 1; goto f1
+	tr4: cs = 2; goto _again
+	tr14: cs = 3; goto f1
+	tr5: cs = 4; goto _again
+	tr15: cs = 5; goto f1
+	tr8: cs = 6; goto _again
+	tr11: cs = 8; goto _again
+	tr2: cs = 9; goto f0
+	tr3: cs = 10; goto _again
+	tr13: cs = 10; goto f1
 	tr7: cs = 11; goto _again
-	tr11: cs = 12; goto _again
+	tr6: cs = 12; goto _again
 	tr10: cs = 13; goto _again
+	tr9: cs = 14; goto _again
 
-f0:
+f1:
 //line match.rl:19
  pb = p 
 	goto _again
-f1:
+f0:
 //line match.rl:21
  e.key = text() 
 	goto _again
@@ -184,7 +200,7 @@ _again:
 		case 4:
 //line match.rl:23
  e.val = textQuoted() 
-//line match.go:188
+//line match.go:204
 		}
 	}
 
