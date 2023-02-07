@@ -9,4 +9,8 @@ match.go: match.rl
 bench:
 	go test -bench=. -count=5  -benchmem
 
-.PHONY: bench
+graph:
+	ragel -Vp match.rl -o match.dot
+	dot -Tsvg match.dot >| match.svg
+
+.PHONY: bench graph
