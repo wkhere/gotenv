@@ -6,60 +6,68 @@ import (
 	"testing"
 )
 
-func TestMatch(t *testing.T) {
-	type tcase struct {
-		input   string
-		result  envvar
-		wanterr string
-	}
-	tvalid := func(input, name, val string) tcase {
-		return tcase{input: input, result: envvar{name, val}}
-	}
-	terror := func(input, errmsg string) tcase {
-		return tcase{input: input, wanterr: errmsg}
-	}
-	var tab = []tcase{
-		tvalid("", "", ""),
-		tvalid(" ", "", ""),
-		tvalid("     ", "", ""),
-		tvalid("\t", "", ""),
-		tvalid("\t\t\t\t", "", ""),
-		tvalid(" \t\t  \t ", "", ""),
-		terror("a", "invalid state"),
-		terror("aaa", "invalid state"),
-		terror("=", "invalid state"),
-		terror("=aa", "invalid state"),
-		tvalid("a=", "a", ""),
-		tvalid("aa=1", "aa", "1"),
-		tvalid("a=11", "a", "11"),
-		tvalid("aa=1", "aa", "1"),
-		tvalid("aaa=11", "aaa", "11"),
-		tvalid(`aaa='11'`, "aaa", "11"),
-		tvalid(`aaa="11"`, "aaa", "11"),
-		terror(`aa='22`, "invalid state"),
-		terror(`aa=22'`, "invalid state"),
-		terror(`aa="22`, "invalid state"),
-		terror(`aa=22"`, "invalid state"),
-		terror(`aa='22"`, "invalid state"),
-		terror(`aa="22'`, "invalid state"),
-		tvalid("_a=1", "_a", "1"),
-		tvalid("a_=1", "a_", "1"),
-		tvalid("a1=1", "a1", "1"),
-		tvalid("_1=1", "_1", "1"),
-		terror("1=1", "invalid state"),
-		terror("1=", "invalid state"),
-		tvalid("aa=12 ", "aa", "12"),
-		tvalid(" aa=12 ", "aa", "12"),
-		tvalid("aa =12", "aa", "12"),
-		tvalid("aa= 12", "aa", "12"),
-		tvalid("aa = 12", "aa", "12"),
-		tvalid(" aa= 12 ", "aa", "12"),
-		tvalid(" aa = 12 ", "aa", "12"),
-		tvalid(" aa = '12' ", "aa", "12"),
-		tvalid(` aa = "12" `, "aa", "12"),
-	}
+type tcase struct {
+	input   string
+	result  envvar
+	wanterr string
+}
 
-	for i, tc := range tab {
+func tvalid(input, name, val string) tcase {
+	return tcase{input: input, result: envvar{name, val}}
+}
+func terror(input, errmsg string) tcase {
+	return tcase{input: input, wanterr: errmsg}
+}
+
+var tcs = []tcase{
+	tvalid("", "", ""),
+	tvalid(" ", "", ""),
+	tvalid("     ", "", ""),
+	tvalid("\t", "", ""),
+	tvalid("\t\t\t\t", "", ""),
+	tvalid(" \t\t  \t ", "", ""),
+	terror("a", "invalid state"),
+	terror("aaa", "invalid state"),
+	terror("=", "invalid state"),
+	terror("=aa", "invalid state"),
+	tvalid("a=", "a", ""),
+	tvalid("aa=1", "aa", "1"),
+	tvalid("a=11", "a", "11"),
+	tvalid("aa=1", "aa", "1"),
+	tvalid("aaa=11", "aaa", "11"),
+	tvalid(`aaa='11'`, "aaa", "11"),
+	tvalid(`aaa="11"`, "aaa", "11"),
+	terror(`aa='22`, "invalid state"),
+	terror(`aa=22'`, "invalid state"),
+	terror(`aa="22`, "invalid state"),
+	terror(`aa=22"`, "invalid state"),
+	terror(`aa='22"`, "invalid state"),
+	terror(`aa="22'`, "invalid state"),
+	tvalid(`aa=x'x`, "aa", "x'x"),
+	tvalid(`aa=x''x`, "aa", "x''x"),
+	tvalid(`aa=x"x`, "aa", `x"x`),
+	tvalid(`aa=x""x`, "aa", `x""x`),
+	tvalid(`aa=x'"x`, "aa", `x'"x`),
+	tvalid(`aa=x"'x`, "aa", `x"'x`),
+	tvalid("_a=1", "_a", "1"),
+	tvalid("a_=1", "a_", "1"),
+	tvalid("a1=1", "a1", "1"),
+	tvalid("_1=1", "_1", "1"),
+	terror("1=1", "invalid state"),
+	terror("1=", "invalid state"),
+	tvalid("aa=12 ", "aa", "12"),
+	tvalid(" aa=12 ", "aa", "12"),
+	tvalid("aa =12", "aa", "12"),
+	tvalid("aa= 12", "aa", "12"),
+	tvalid("aa = 12", "aa", "12"),
+	tvalid(" aa= 12 ", "aa", "12"),
+	tvalid(" aa = 12 ", "aa", "12"),
+	tvalid(" aa = '12' ", "aa", "12"),
+	tvalid(` aa = "12" `, "aa", "12"),
+}
+
+func TestMatch(t *testing.T) {
+	for i, tc := range tcs {
 		e, err := match([]byte(tc.input))
 		switch {
 		case err != nil && tc.wanterr == "":
@@ -78,6 +86,15 @@ func TestMatch(t *testing.T) {
 			if !reflect.DeepEqual(e, tc.result) {
 				t.Errorf("tc#%d mismatch:\nhave %v\nwant %v", i, e, tc.result)
 			}
+		}
+	}
+}
+
+func BenchmarkMatch(b *testing.B) {
+	const cap = 40
+	for i := 0; i < b.N; i++ {
+		for _, tc := range tcs[:cap] {
+			match([]byte(tc.input))
 		}
 	}
 }

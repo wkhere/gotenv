@@ -5,3 +5,8 @@ lib: *.go match.go
 
 match.go: match.rl
 	ragel -Z -G1 match.rl
+
+bench:
+	go test -bench=. -count=5  -benchmem
+
+.PHONY: bench
