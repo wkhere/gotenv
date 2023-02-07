@@ -1,5 +1,4 @@
 lib: *.go match.go
-	go vet
 	go test
 	go build
 

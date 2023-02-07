@@ -22,14 +22,17 @@ func match(data []byte) (e envvar, err error) {
 		action setVal { e.val = text() }
 		action setValQuoted { e.val = textQuoted() }
 
+		action skipRest { return e, nil }
+
+		comment = '#' >skipRest;
 		key = (alpha | '_')+ >mark (alnum | '_')* %setKey;
 		nonQuote = ^space - ('"'|'\'');
 		valSingleQuoted  = '\'' >mark !'\'' '\'' %setValQuoted;
 		valDoubleQuoted  = '"'  >mark !'"'  '"'  %setValQuoted;
 		valSimple  = nonQuote >mark (^space* nonQuote)? %setVal;
 		val = valSingleQuoted | valDoubleQuoted | valSimple | zlen;
-		main := space* (key space* '=' space* val space*) | space*;
-		# todo: handle comments
+		final = space* comment?;
+		main := space* comment? (key space* '=' space* val)? final;
 
 		write init;
 		write exec;
