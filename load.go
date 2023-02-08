@@ -25,6 +25,7 @@ func Load(filenames ...string) (err error) {
 		if err != nil {
 			return fmt.Errorf("file %s: %w", fn, err)
 		}
+		ee = dedup(ee)
 
 		for _, e := range ee {
 			_, exists := os.LookupEnv(e.key)
