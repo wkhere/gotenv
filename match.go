@@ -136,29 +136,24 @@ _resume:
 		}
 		goto tr6;
 	case 11:
-		switch data[p] {
-		case 32:
+		if data[p] == 32 {
 			goto tr20;
-		case 34:
-			goto tr7;
-		case 39:
-			goto tr7;
 		}
 		if 9 <= data[p] && data[p] <= 13 {
 			goto tr20;
 		}
-		goto tr6;
+		goto tr1;
 	case 3:
 		switch data[p] {
 		case 32:
-			goto tr7;
+			goto tr1;
 		case 34:
 			goto tr7;
 		case 39:
 			goto tr7;
 		}
 		if 9 <= data[p] && data[p] <= 13 {
-			goto tr7;
+			goto tr1;
 		}
 		goto tr6;
 	case 4:
@@ -302,14 +297,14 @@ _again:
 		case 4:
 //line match.rl:23
  e.val = textQuoted() 
-//line match.go:306
+//line match.go:301
 		}
 	}
 
 	_out: {}
 	}
 
-//line match.rl:35
+//line match.rl:36
 
 
 	if cs < envvar_first_final {

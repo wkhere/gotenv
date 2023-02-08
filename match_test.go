@@ -64,6 +64,7 @@ var tcs = []tcase{
 	tvalid(" aa = 12 ", "aa", "12"),
 	tvalid(" aa = '12' ", "aa", "12"),
 	tvalid(` aa = "12" `, "aa", "12"),
+	terror(`aa = 1 2`, "invalid state"),
 }
 
 func TestMatch(t *testing.T) {
