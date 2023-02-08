@@ -27,7 +27,7 @@ func match(data []byte) (e envvar, err error) {
 		valSingleQuoted  = '\'' >mark !'\'' '\'' %setValQuoted;
 		valDoubleQuoted  = '"'  >mark !'"'  '"'  %setValQuoted;
 		valSimple  = nonQuote >mark (^space* nonQuote)? %setVal;
-		val = (valSingleQuoted | valDoubleQuoted | valSimple | zlen);
+		val = valSingleQuoted | valDoubleQuoted | valSimple | zlen;
 		main := space* (key space* '=' space* val space*) | space*;
 		# todo: handle comments
 
