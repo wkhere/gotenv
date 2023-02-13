@@ -2,4 +2,4 @@ Good reference format:
 https://hexdocs.pm/dotenvy/dotenv-file-format.html
 
 So far, interpolation and escape sequences are not implemented;
-but the quotes are.
+but the quotes and comments are.
