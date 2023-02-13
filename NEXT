@@ -1,1 +1,3 @@
 + bug#1: for two lines with the same key, first one is used
+
+- error messages instead of "invalid state x"
