@@ -6,7 +6,9 @@ match.go: match.rl
 	ragel -Z -G1 match.rl
 
 bench:
-	go test -bench=. -count=5  -benchmem
+	go test -bench=$(sel) -count=5  -benchmem
+
+sel=.
 
 graph:
 	ragel -Vp match.rl -o match.dot
