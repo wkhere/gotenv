@@ -1,10 +1,13 @@
 package gotenv
 
-import "golang.org/x/exp/slices"
+import (
+	"cmp"
+	"slices"
+)
 
 func dedup(a []envvar) []envvar {
-	slices.SortStableFunc(a, func(e1, e2 envvar) bool {
-		return e1.key < e2.key
+	slices.SortStableFunc(a, func(e1, e2 envvar) int {
+		return cmp.Compare(e1.key, e2.key)
 	})
 
 	for i := 0; i < len(a)-1; {
