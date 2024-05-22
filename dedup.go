@@ -5,13 +5,13 @@ import (
 	"slices"
 )
 
-func dedup(a []envvar) []envvar {
-	slices.SortStableFunc(a, func(e1, e2 envvar) int {
-		return cmp.Compare(e1.key, e2.key)
+func dedup(a []EnvVar) []EnvVar {
+	slices.SortStableFunc(a, func(e1, e2 EnvVar) int {
+		return cmp.Compare(e1.Key, e2.Key)
 	})
 
 	for i := 0; i < len(a)-1; {
-		if a[i].key == a[i+1].key {
+		if a[i].Key == a[i+1].Key {
 			a = append(a[:i], a[i+1:]...)
 		} else {
 			i++

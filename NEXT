@@ -2,4 +2,4 @@
 
 - error messages instead of "invalid state x"
 
-- bug#2: dedup works only within one input file, should work across many files
++ bug#2: dedup works only within one input file, should work across many files

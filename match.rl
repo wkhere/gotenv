@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func match(data []byte) (e envvar, err error) {
+func match(data []byte) (e EnvVar, err error) {
 	%% machine envvar;
 	%% write data;
 
@@ -18,9 +18,9 @@ func match(data []byte) (e envvar, err error) {
 	%%{
 		action mark { pb = p }
 
-		action setKey { e.key = text() }
-		action setVal { e.val = text() }
-		action setValQuoted { e.val = textQuoted() }
+		action setKey { e.Key = text() }
+		action setVal { e.Val = text() }
+		action setValQuoted { e.Val = textQuoted() }
 
 		action skipRest { return e, nil }
 

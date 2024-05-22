@@ -5,64 +5,64 @@ import (
 	"testing"
 )
 
-type ee = []envvar
+type ee = []EnvVar
 
 var dedupTab = []struct {
-	a, want []envvar
+	a, want []EnvVar
 }{
 	{a: nil, want: nil},
 	{a: ee{}, want: ee{}},
-	{a: ee{{key: "foo", val: "v1"}}, want: ee{{key: "foo", val: "v1"}}},
+	{a: ee{{Key: "foo", Val: "v1"}}, want: ee{{Key: "foo", Val: "v1"}}},
 	{
 		a: ee{
-			{key: "foo", val: "v1"},
-			{key: "foo", val: "v2"},
-			{key: "quux", val: "v"},
+			{Key: "foo", Val: "v1"},
+			{Key: "foo", Val: "v2"},
+			{Key: "quux", Val: "v"},
 		},
-		want: ee{{key: "foo", val: "v2"}, {key: "quux", val: "v"}},
+		want: ee{{Key: "foo", Val: "v2"}, {Key: "quux", Val: "v"}},
 	},
 	{
 		a: ee{
-			{key: "quux", val: "v"},
-			{key: "foo", val: "v1"},
-			{key: "foo", val: "v2"},
+			{Key: "quux", Val: "v"},
+			{Key: "foo", Val: "v1"},
+			{Key: "foo", Val: "v2"},
 		},
-		want: ee{{key: "foo", val: "v2"}, {key: "quux", val: "v"}},
+		want: ee{{Key: "foo", Val: "v2"}, {Key: "quux", Val: "v"}},
 	},
 	{
 		a: ee{
-			{key: "baz", val: "b"},
-			{key: "foo", val: "v1"},
-			{key: "foo", val: "v2"},
+			{Key: "baz", Val: "b"},
+			{Key: "foo", Val: "v1"},
+			{Key: "foo", Val: "v2"},
 		},
-		want: ee{{key: "baz", val: "b"}, {key: "foo", val: "v2"}},
+		want: ee{{Key: "baz", Val: "b"}, {Key: "foo", Val: "v2"}},
 	},
 	{
 		a: ee{
-			{key: "baz", val: "b1"},
-			{key: "baz", val: "b2"},
-			{key: "baz", val: "b3"},
-			{key: "foo", val: "v1"},
-			{key: "foo", val: "v2"},
+			{Key: "baz", Val: "b1"},
+			{Key: "baz", Val: "b2"},
+			{Key: "baz", Val: "b3"},
+			{Key: "foo", Val: "v1"},
+			{Key: "foo", Val: "v2"},
 		},
-		want: ee{{key: "baz", val: "b3"}, {key: "foo", val: "v2"}},
+		want: ee{{Key: "baz", Val: "b3"}, {Key: "foo", Val: "v2"}},
 	},
 	{
 		a: ee{
-			{key: "foo", val: "v0"},
-			{key: "baz", val: "b1"},
-			{key: "foo", val: "v1"},
-			{key: "foo", val: "v1.1"},
-			{key: "baz", val: "b2"},
-			{key: "foo", val: "v2"},
-			{key: "baz", val: "b3"},
+			{Key: "foo", Val: "v0"},
+			{Key: "baz", Val: "b1"},
+			{Key: "foo", Val: "v1"},
+			{Key: "foo", Val: "v1.1"},
+			{Key: "baz", Val: "b2"},
+			{Key: "foo", Val: "v2"},
+			{Key: "baz", Val: "b3"},
 		},
-		want: ee{{key: "baz", val: "b3"}, {key: "foo", val: "v2"}},
+		want: ee{{Key: "baz", Val: "b3"}, {Key: "foo", Val: "v2"}},
 	},
 }
 
 func TestDedup(t *testing.T) {
-	type ee = []envvar
+	type ee = []EnvVar
 	for i, tc := range dedupTab {
 		a := dedup(tc.a)
 		if !reflect.DeepEqual(a, tc.want) {

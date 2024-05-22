@@ -8,12 +8,12 @@ import (
 
 type tcase struct {
 	input   string
-	result  envvar
+	result  EnvVar
 	wanterr string
 }
 
 func tvalid(input, name, val string) tcase {
-	return tcase{input: input, result: envvar{name, val}}
+	return tcase{input: input, result: EnvVar{name, val}}
 }
 func terror(input, errmsg string) tcase {
 	return tcase{input: input, wanterr: errmsg}

@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func match(data []byte) (e envvar, err error) {
+func match(data []byte) (e EnvVar, err error) {
 	
 //line match.rl:9
 	
@@ -335,15 +335,15 @@ f2:
 	goto _again
 f0:
 //line match.rl:21
- e.key = text() 
+ e.Key = text() 
 	goto _again
 f4:
 //line match.rl:22
- e.val = text() 
+ e.Val = text() 
 	goto _again
 f6:
 //line match.rl:23
- e.val = textQuoted() 
+ e.Val = textQuoted() 
 	goto _again
 f1:
 //line match.rl:25
@@ -357,13 +357,13 @@ f3:
 	goto _again
 f5:
 //line match.rl:22
- e.val = text() 
+ e.Val = text() 
 //line match.rl:25
  return e, nil 
 	goto _again
 f7:
 //line match.rl:23
- e.val = textQuoted() 
+ e.Val = textQuoted() 
 //line match.rl:25
  return e, nil 
 	goto _again
@@ -380,10 +380,10 @@ _again:
 		switch _envvar_eof_actions[cs] {
 		case 5:
 //line match.rl:22
- e.val = text() 
+ e.Val = text() 
 		case 7:
 //line match.rl:23
- e.val = textQuoted() 
+ e.Val = textQuoted() 
 //line match.go:388
 		}
 	}

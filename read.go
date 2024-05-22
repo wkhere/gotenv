@@ -6,7 +6,7 @@ import (
     "io"
 )
 
-func readenv(r io.Reader) (ee []envvar, _ error) {
+func readenv(r io.Reader) (ee []EnvVar, _ error) {
     b := bufio.NewScanner(r)
     lineno := 0
     for b.Scan() {
@@ -18,7 +18,7 @@ func readenv(r io.Reader) (ee []envvar, _ error) {
                 lineno, err, e,
             )
         }
-        if e.key == "" {
+        if e.Key == "" {
             // empty var and no error means empty line or comments
             continue
         }
